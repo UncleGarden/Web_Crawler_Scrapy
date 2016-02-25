@@ -11,9 +11,10 @@ class LeetcodeSpider(scrapy.Spider):
 
     def parse_question(self, response):
         yield {
-            #'title': response.css('h1 a::text').extract()[0],
-            #'votes': response.css('.question .vote-count-post::text').extract()[0],
+            'Link': response.url,
+            'Title': response.css('h3::text').extract()[0],
+            'Total Accepted:': response.css('.total-ac strong::text').extract()[0], # make sense, some of the tests need login
             #'body': response.css('.question .post-text').extract()[0],
             #'tags': response.css('.question .post-tag::text').extract(),
-            'link': response.url,
+
         }

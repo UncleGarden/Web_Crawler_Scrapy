@@ -7,6 +7,7 @@ class LeetcodeSpider(scrapy.Spider):
     def parse(self, response):
         for href in response.css('.row tr td a::attr(href)'):
             full_url = response.urljoin(href.extract())
+            print full_url
             yield scrapy.Request(full_url, callback=self.parse_question)
 
     def parse_question(self, response):

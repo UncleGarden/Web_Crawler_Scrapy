@@ -5,7 +5,34 @@ from scrapy.linkextractors import LinkExtractor
 from scrapy.selector import HtmlXPathSelector
 from scrapy.spiders import CrawlSpider, Rule
 
+from scrapy.spiders import Spider
+from scrapy.selector import Selector
+from miappstore.items import MiappstoreItem
 
+class MiappstoreSpider(Spider):
+    name = "miappstore_home"
+    allowed_domains = ["app.mi.com"]
+    start_urls = ["http://app.mi.com/topList"]
+
+    def parse(self, response):
+
+        sites = Selector(response).xpath('//h5')
+        items = []
+
+        for site in sites:
+            item = MiappstoreItem()
+
+            title = site.xpath("a/text()").extract()
+            link = site.xpath("a/@href").extract()
+
+            item["title"] = [t.encode('utf-8') for t in title]
+            item["link"] = [l.encode('utf-8') for l in link]
+
+            items.append(item)
+
+        return items
+
+'''
 from scrapy.item import Item, Field
 
 class MiappstoreItem(Item):
@@ -40,3 +67,4 @@ class MySpider(CrawlSpider):
 
             items.append(item)
         return(items)
+'''
